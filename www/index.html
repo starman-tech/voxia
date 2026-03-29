@@ -1086,35 +1086,26 @@ sensSlider.addEventListener('input',updateSensSlider);
  *  Cache TOUT : overlay noir + barre de nav Android
  *  via Capacitor NavigationBar + StatusBar hide
  * ═════════════════════════════════════════════════════════ */
-async function capHideBars(){
-  try{
-    const SB=window.Capacitor?.Plugins?.StatusBar;
-    if(SB) await SB.hide();
-  }catch(e){}
-  try{
-    const NB=window.Capacitor?.Plugins?.NavigationBar;
-    if(NB){
-      /* @capgo/capacitor-navigation-bar API */
-      if(typeof NB.hide==='function') await NB.hide();
-      else if(typeof NB.setTransparency==='function') await NB.setTransparency({isTransparent:true});
-    }
-  }catch(e){}
+async function capHideBars() {
+    try {
+        // Plugin custom NightMode
+        await window.Capacitor?.Plugins?.NightMode?.enable();
+    } catch(e) {}
+    try {
+        const SB = window.Capacitor?.Plugins?.StatusBar;
+        if (SB) await SB.hide();
+    } catch(e) {}
 }
-async function capShowBars(){
-  try{
-    const SB=window.Capacitor?.Plugins?.StatusBar;
-    if(SB) await SB.show();
-  }catch(e){}
-  try{
-    const NB=window.Capacitor?.Plugins?.NavigationBar;
-    if(NB){
-      if(typeof NB.show==='function') await NB.show();
-      else if(typeof NB.setColor==='function') await NB.setColor({color:'#08080d',darkButtons:false});
-    }
-  }catch(e){}
-}
-// Remplace enterNightMode() et exitNightMode() par ceci :
 
+async function capShowBars() {
+    try {
+        await window.Capacitor?.Plugins?.NightMode?.disable();
+    } catch(e) {}
+    try {
+        const SB = window.Capacitor?.Plugins?.StatusBar;
+        if (SB) await SB.show();
+    } catch(e) {}
+}
 async function enterNightMode(){
   if(nightActive) return;
   nightActive = true;

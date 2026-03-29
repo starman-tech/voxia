@@ -9,9 +9,21 @@ import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
 
+    public static boolean nightMode = false;
+    private static MainActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
+        registerPlugin(NightModePlugin.class); // ← ajoute cette ligne
+    }
+
+    public static void setNightMode(boolean enabled) {
+        nightMode = enabled;
+        if (instance != null) {
+            instance.runOnUiThread(() -> instance.applySystemUI());
+        }
     }
 
     @Override
@@ -20,19 +32,11 @@ public class MainActivity extends BridgeActivity {
         if (hasFocus) applySystemUI();
     }
 
-    private void applySystemUI() {
-        String nightMode = "false";
-        try {
-            nightMode = (String) getBridge().getWebView()
-                .evaluateJavascriptSync("String(window.__nightMode||false)");
-        } catch (Exception e) {
-            // ignore
-        }
-
+    public void applySystemUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowInsetsController c = getWindow().getInsetsController();
             if (c != null) {
-                if ("true".equals(nightMode)) {
+                if (nightMode) {
                     c.hide(WindowInsets.Type.systemBars());
                     c.setSystemBarsBehavior(
                         WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
@@ -42,7 +46,7 @@ public class MainActivity extends BridgeActivity {
             }
         } else {
             View v = getWindow().getDecorView();
-            if ("true".equals(nightMode)) {
+            if (nightMode) {
                 v.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
