@@ -110,7 +110,7 @@ body {
 .sn{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sm{font-size:10px;color:var(--t3);font-family:var(--fm);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .sa{display:flex;gap:6px}
-.cfg{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;width:100%;margin:0 auto;left:0;right:0}
+.cfg{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;width:100%;margin:0 auto;left:0;right:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 .cfg.on{display:flex}
 .cfg-top{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--s1);border-bottom:1.5px solid var(--ba);flex-shrink:0}
 .cfg-top-title{font-size:16px;font-weight:600;color:var(--t1);flex:1}
@@ -199,6 +199,12 @@ body {
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--t4);border-radius:2px}
 ::-webkit-scrollbar-thumb:hover{background:var(--t3)}
+/* ── NIGHT MODE ── */
+#night-overlay{display:none;position:fixed;inset:0;background:#000;z-index:10000;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#night-overlay.on{display:flex;align-items:center;justify-content:center}
+.night-hint{color:rgba(255,255,255,.15);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--fm);text-align:center;pointer-events:none;animation:nfadeout 3s ease-out 2s both;padding:0 30px;line-height:1.9}
+@keyframes nfadeout{0%{opacity:1}100%{opacity:0}}
+.hbtn.night-on{background:rgba(20,15,35,.9);border-color:rgba(140,80,220,.5);color:#a070e8}
 </style>
 </head>
 <body>
@@ -217,6 +223,9 @@ body {
   <span class="device-badge" id="device-badge"></span>
   <button class="hbtn" id="btn-save-session" title="Sauvegarder">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+  </button>
+  <button class="hbtn" id="btn-night" title="Mode nuit — ecran noir">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
   <button class="hbtn" id="btn-settings" title="Parametres">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -548,6 +557,8 @@ body {
   </div>
 </div>
 
+<div id="night-overlay"></div>
+
 </div>
 
 <script>
@@ -615,6 +626,8 @@ const inpInterval=$('inp-interval'), inpBufsize=$('inp-bufsize'), inpTemp=$('inp
 const inpMaxtok=$('inp-maxtok'), inpPunct=$('inp-punctuate'), inpAutosave=$('inp-autosave');
 const inpPrefix=$('inp-sess-prefix'), inpPromSum=$('inp-prompt-sum'), inpPromFin=$('inp-prompt-final');
 const inpSensitivity=$('inp-sensitivity'), inpRawMode=$('inp-raw-mode');
+const btnNight=$('btn-night'), nightOverlay=$('night-overlay');
+let wakeLock=null, nightActive=false;
 
 /* ═══ STORAGE (localStorage) ════════════════════════════ */
 function loadCfg(){
@@ -1144,6 +1157,62 @@ function updateSensSlider(){
   sensDesc.textContent=(SENS_LABELS.find(l=>v<=l.max)||SENS_LABELS.at(-1)).text;
 }
 sensSlider.addEventListener('input',updateSensSlider);
+
+/* ═══ NIGHT MODE — ecran noir + wake lock ═══════════════
+ *  - Wake Lock API : CPU reste actif, micro continue
+ *  - Fullscreen    : barres systeme cachees
+ *  - Overlay noir  : ecran visuellement eteint
+ *  - Tap n'importe ou pour quitter
+ * ══════════════════════════════════════════════════════════ */
+async function capHideBars(){
+  try{if(window.Capacitor?.Plugins?.StatusBar) await window.Capacitor.Plugins.StatusBar.hide()}catch(e){}
+  try{if(window.Capacitor?.Plugins?.NavigationBar) await window.Capacitor.Plugins.NavigationBar.hide()}catch(e){}
+}
+async function capShowBars(){
+  try{if(window.Capacitor?.Plugins?.StatusBar) await window.Capacitor.Plugins.StatusBar.show()}catch(e){}
+  try{if(window.Capacitor?.Plugins?.NavigationBar) await window.Capacitor.Plugins.NavigationBar.show()}catch(e){}
+}
+
+async function enterNightMode(){
+  if(nightActive) return;
+  nightActive=true;
+  /* Hint animé — recréé à chaque fois pour relancer l'animation */
+  nightOverlay.innerHTML='<div class="night-hint">Appuyez pour quitter<br><span style="font-size:9px;opacity:.7;letter-spacing:.08em">Le micro continue d\'enregistrer</span></div>';
+  nightOverlay.classList.add('on');
+  btnNight.classList.add('night-on');
+  /* Wake Lock — empêche le CPU de dormir, micro reste actif */
+  try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
+  /* Fullscreen pour masquer status bar + nav bar */
+  try{
+    if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'});
+    else if(document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
+  }catch(e){}
+  /* Capacitor : hide native bars */
+  await capHideBars();
+}
+
+async function exitNightMode(){
+  if(!nightActive) return;
+  nightActive=false;
+  nightOverlay.classList.remove('on');
+  btnNight.classList.remove('night-on');
+  /* Libérer wake lock */
+  if(wakeLock){try{await wakeLock.release()}catch(e){} wakeLock=null;}
+  /* Quitter fullscreen */
+  try{if(document.exitFullscreen&&document.fullscreenElement) await document.exitFullscreen()}catch(e){}
+  /* Capacitor : remettre les barres */
+  await capShowBars();
+}
+
+btnNight.addEventListener('click',()=>nightActive?exitNightMode():enterNightMode());
+nightOverlay.addEventListener('click',exitNightMode);
+
+/* Relancer wake lock si interrompu (appel entrant, etc.) */
+document.addEventListener('visibilitychange',async()=>{
+  if(wakeLock===null&&nightActive&&document.visibilityState==='visible'){
+    try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
+  }
+});
 
 /* ═══ INIT ══════════════════════════════════════════════ */
 loadCfg();
