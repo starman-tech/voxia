@@ -1,0 +1,13 @@
+{
+  "appId": "com.gaudioso.voxia",
+  "appName": "Voxia",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Microphone": {
+      "iosUsageDescription": "Voxia a besoin du micro pour la transcription vocale."
+    }
+  }
+}
