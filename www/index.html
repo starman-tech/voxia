@@ -1113,28 +1113,39 @@ async function capShowBars(){
     }
   }catch(e){}
 }
+// Remplace enterNightMode() et exitNightMode() par ceci :
 
 async function enterNightMode(){
   if(nightActive) return;
-  nightActive=true;
-  nightOverlay.innerHTML='<div class="night-hint">Appuyez pour quitter<br><span style="font-size:9px;opacity:.7;letter-spacing:.08em">Le micro continue d\'enregistrer</span></div>';
+  nightActive = true;
+  window.__nightMode = true;                    // flag lu par le natif
+  nightOverlay.innerHTML = '...';
   nightOverlay.classList.add('on');
   btnNight.classList.add('night-on');
-  try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
-  try{
-    if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'});
-    else if(document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
-  }catch(e){}
+  // Wake Lock
+  try { wakeLock = await navigator.wakeLock.request('screen') } catch(e) {}
+  // Fullscreen web
+  try {
+    if(document.documentElement.requestFullscreen)
+      await document.documentElement.requestFullscreen({navigationUI:'hide'});
+  } catch(e) {}
+  // Plugins Capacitor
   await capHideBars();
+  // Déclenche la MAJ de MainActivity
+  try {
+    window.Capacitor?.Plugins?.App?.exitApp; // juste un ping pour activer onWindowFocusChanged
+    // OU : appel explicite via plugin custom si tu l'as créé
+  } catch(e) {}
 }
 
 async function exitNightMode(){
   if(!nightActive) return;
-  nightActive=false;
+  nightActive = false;
+  window.__nightMode = false;
   nightOverlay.classList.remove('on');
   btnNight.classList.remove('night-on');
-  if(wakeLock){try{await wakeLock.release()}catch(e){} wakeLock=null;}
-  try{if(document.exitFullscreen&&document.fullscreenElement) await document.exitFullscreen()}catch(e){}
+  if(wakeLock){ try { await wakeLock.release() } catch(e){} wakeLock = null; }
+  try { if(document.exitFullscreen && document.fullscreenElement) await document.exitFullscreen() } catch(e) {}
   await capShowBars();
 }
 
@@ -1148,7 +1159,17 @@ document.addEventListener('visibilitychange',async()=>{
 });
 
 /* ═══ INIT ══════════════════════════════════════════════ */
-loadCfg();
+// En bas du script, remplace loadCfg() par :
+async function init() {
+  loadCfg();
+  if(cfg.apikey) await loadModels(true);
+  // Cache le splash une fois tout chargé
+  try {
+    const { SplashScreen } = window.Capacitor?.Plugins || {};
+    if (SplashScreen) await SplashScreen.hide({ fadeOutDuration: 400 });
+  } catch(e) {}
+}
+init();
 if(cfg.apikey) loadModels(true);
 </script>
 <script>
@@ -1169,3 +1190,4 @@ if(cfg.apikey) loadModels(true);
 </script>
 </body>
 </html>
+

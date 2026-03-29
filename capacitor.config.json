@@ -6,6 +6,15 @@
     "androidScheme": "https"
   },
   "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2500,
+      "launchAutoHide": false,
+      "backgroundColor": "#08080d",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
     "Microphone": {
       "iosUsageDescription": "Voxia a besoin du micro pour la transcription vocale."
     }
