@@ -1,4 +1,4 @@
-package com.innertrack.app;
+package com.voxia.app;
 
 import com.getcapacitor.BridgeActivity;
 
