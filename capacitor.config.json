@@ -1,22 +1,16 @@
 {
-  "appId": "com.voxia.app",
+  "appId": "com.matteocean.voxia",
   "appName": "Voxia",
-  "webDir": "www",
-  "server": {
-    "androidScheme": "https"
-  },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 2500,
+      "launchShowDuration": 0,
       "launchAutoHide": false,
       "backgroundColor": "#08080d",
       "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
       "showSpinner": false,
       "splashFullScreen": true,
       "splashImmersive": true
-    },
-    "Microphone": {
-      "iosUsageDescription": "Voxia a besoin du micro pour la transcription vocale."
     }
   }
 }

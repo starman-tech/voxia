@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.Window;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
@@ -16,13 +17,19 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = this;
-        registerPlugin(NightModePlugin.class); // ← ajoute cette ligne
+        registerPlugin(NightModePlugin.class);
     }
 
     public static void setNightMode(boolean enabled) {
         nightMode = enabled;
         if (instance != null) {
-            instance.runOnUiThread(() -> instance.applySystemUI());
+            instance.runOnUiThread(() -> {
+                instance.applySystemUI();
+                // Double appel après délai pour contrer le re-show Android
+                instance.getWindow().getDecorView().postDelayed(
+                    () -> instance.applySystemUI(), 300
+                );
+            });
         }
     }
 
@@ -33,19 +40,23 @@ public class MainActivity extends BridgeActivity {
     }
 
     public void applySystemUI() {
+        Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsController c = getWindow().getInsetsController();
+            window.setDecorFitsSystemWindows(!nightMode);
+            WindowInsetsController c = window.getInsetsController();
             if (c != null) {
                 if (nightMode) {
-                    c.hide(WindowInsets.Type.systemBars());
+                    c.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
                     c.setSystemBarsBehavior(
-                        WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                        WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    );
                 } else {
-                    c.show(WindowInsets.Type.systemBars());
+                    c.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                    window.setDecorFitsSystemWindows(true);
                 }
             }
         } else {
-            View v = getWindow().getDecorView();
+            View v = window.getDecorView();
             if (nightMode) {
                 v.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -56,7 +67,9 @@ public class MainActivity extends BridgeActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                 );
             } else {
-                v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                v.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                );
             }
         }
     }

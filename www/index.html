@@ -1110,7 +1110,7 @@ async function enterNightMode(){
   if(nightActive) return;
   nightActive = true;
   window.__nightMode = true;                    // flag lu par le natif
-  nightOverlay.innerHTML = '...';
+  nightOverlay.innerHTML = '';
   nightOverlay.classList.add('on');
   btnNight.classList.add('night-on');
   // Wake Lock
@@ -1153,13 +1153,17 @@ document.addEventListener('visibilitychange',async()=>{
 // En bas du script, remplace loadCfg() par :
 async function init() {
   loadCfg();
-  if(cfg.apikey) await loadModels(true);
-  // Cache le splash une fois tout chargé
+  if (cfg.apikey) loadModels(true);
+
+  // Cache le splash proprement une fois tout prêt
   try {
     const { SplashScreen } = window.Capacitor?.Plugins || {};
-    if (SplashScreen) await SplashScreen.hide({ fadeOutDuration: 400 });
+    if (SplashScreen) {
+      await SplashScreen.hide({ fadeOutDuration: 500 });
+    }
   } catch(e) {}
 }
+
 init();
 if(cfg.apikey) loadModels(true);
 </script>
