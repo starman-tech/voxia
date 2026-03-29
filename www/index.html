@@ -21,20 +21,15 @@
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:var(--fn);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
 
-/* ── LAYOUT : pleine largeur sur desktop, 480px max sur mobile ── */
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden;width:100%;margin:0 auto;position:relative;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 @media(max-width:600px){.app{max-width:480px}}
-body {
-    background: #08080d;
-    /* La couleur remonte derrière la status bar transparente */
-}
+body{background:#08080d}
+
 .header{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--s1);border-bottom:1px solid var(--ba);flex-shrink:0}
 .logo{width:36px;height:36px;border-radius:10px;background:var(--alo);border:1.5px solid var(--ba);display:flex;align-items:center;justify-content:center;color:var(--a);flex-shrink:0}
 .logo svg{width:17px;height:17px}
-.app-name{font-size:20px;font-weight:700;letter-spacing:-.5px;color:var(--t1);flex:1;display:flex;align-items:center;gap:8px}
-.v-badge{font-size:10px;font-weight:500;letter-spacing:.08em;color:var(--a);background:var(--alo);border:1px solid var(--ba);padding:2px 7px;border-radius:4px}
+.app-name{font-size:20px;font-weight:700;letter-spacing:-.5px;color:var(--t1);flex:1}
 .device-badge{font-size:10px;font-weight:500;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:flex;align-items:center;gap:4px}
-/* badge gris pour desktop et mobile */
 .device-badge.mobile{color:var(--t3);background:var(--s3);border:1px solid var(--ln2)}
 .device-badge.desktop{color:var(--t3);background:var(--s3);border:1px solid var(--ln2)}
 .device-badge svg{width:10px;height:10px}
@@ -42,6 +37,8 @@ body {
 .hbtn svg{width:17px;height:17px;pointer-events:none}
 .hbtn:hover{background:var(--amd);border-color:var(--ba2)}
 .hbtn.on{background:var(--amd);border-color:var(--ba2)}
+
+/* ── RECBAR ── */
 .recbar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--s1);border-bottom:1px solid var(--ln);flex-shrink:0}
 .rec-btn{display:flex;align-items:center;gap:10px;padding:0 18px;height:40px;background:var(--s3);border:1.5px solid var(--ln2);border-radius:var(--r);color:var(--t1);cursor:pointer;font-family:var(--fn);font-size:14px;font-weight:600;transition:all .2s var(--ease);position:relative;overflow:hidden;flex-shrink:0}
 .rec-btn:hover{background:var(--s4);border-color:var(--ln2)}
@@ -52,12 +49,17 @@ body {
 .rec-btn.live::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(217,85,85,.05),transparent);animation:sheen 2.5s ease-in-out infinite}
 @keyframes pdot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.5);opacity:.2}}
 @keyframes sheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.schip{display:flex;align-items:center;gap:7px;padding:6px 12px 6px 9px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--ln);background:var(--s3);color:var(--t3);transition:all .2s var(--ease)}
-.schip.live{border-color:var(--rba);background:var(--rlo);color:var(--red)}
-.schip .blip{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
-.schip.live .blip{animation:pdot 1.1s ease-in-out infinite}
+
+/* chrono prend l'espace du milieu */
 .chrono{font-family:var(--fm);font-size:15px;font-weight:500;letter-spacing:.14em;color:var(--t3);margin-left:auto;transition:color .2s;min-width:48px;text-align:right}
 .chrono.live{color:var(--red)}
+
+/* bouton nuit dans la recbar */
+.hbtn-night{width:38px;height:38px;border-radius:var(--r);border:1.5px solid var(--ba);background:var(--alo);color:var(--a);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s var(--ease);flex-shrink:0}
+.hbtn-night svg{width:17px;height:17px;pointer-events:none}
+.hbtn-night:hover{background:var(--amd);border-color:var(--ba2)}
+.hbtn-night.night-on{background:rgba(20,15,35,.9);border-color:rgba(140,80,220,.5);color:#a070e8}
+
 .perm-banner{display:none;align-items:center;gap:9px;padding:10px 16px;background:var(--rlo);border-bottom:1px solid var(--rba);color:var(--red);font-size:12px;flex-shrink:0}
 .perm-banner.show{display:flex}
 .perm-banner svg{width:14px;height:14px;flex-shrink:0}
@@ -115,7 +117,6 @@ body {
 .cfg-top{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--s1);border-bottom:1.5px solid var(--ba);flex-shrink:0}
 .cfg-top-title{font-size:16px;font-weight:600;color:var(--t1);flex:1}
 .cfg-body{flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:14px}
-/* sur desktop, la colonne de settings ne dépasse pas 720px, centrée */
 @media(min-width:768px){
   .cfg-body{align-items:center}
   .cfg-body>.sg,.cfg-body>.sens-wrap{width:100%;max-width:720px}
@@ -185,7 +186,6 @@ body {
 .contact-privacy{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:7px;background:rgba(61,184,122,.08);border:1px solid rgba(61,184,122,.18);font-size:11px;color:var(--t2);line-height:1.6}
 .contact-privacy svg{color:var(--grn);flex-shrink:0;margin-top:1px}
 .atag{font-size:10px;font-weight:500;letter-spacing:.04em;color:var(--a);background:var(--alo);border:1px solid var(--ba);padding:3px 8px;border-radius:4px}
-/* ── CONTACT LINKS ── */
 .clink{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--s3);border:1px solid var(--ln2);text-decoration:none;transition:all .16s var(--ease);color:var(--t1)}
 .clink:hover{background:var(--s4);border-color:var(--cc,var(--ba));box-shadow:0 0 0 1px var(--cc,var(--ba))}
 .clink-icon{width:30px;height:30px;border-radius:7px;background:var(--cclo,var(--alo));border:1px solid var(--cc,var(--ba));display:flex;align-items:center;justify-content:center;color:var(--cc,var(--a));flex-shrink:0}
@@ -204,12 +204,12 @@ body {
 #night-overlay.on{display:flex;align-items:center;justify-content:center}
 .night-hint{color:rgba(255,255,255,.15);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--fm);text-align:center;pointer-events:none;animation:nfadeout 3s ease-out 2s both;padding:0 30px;line-height:1.9}
 @keyframes nfadeout{0%{opacity:1}100%{opacity:0}}
-.hbtn.night-on{background:rgba(20,15,35,.9);border-color:rgba(140,80,220,.5);color:#a070e8}
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- ══ HEADER — sans badge V1.2, sans bouton nuit ══ -->
 <div class="header">
   <div class="logo">
     <svg viewBox="0 0 24 24" fill="none">
@@ -219,29 +219,26 @@ body {
       <line x1="9" y1="22" x2="15" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     </svg>
   </div>
-  <div class="app-name">Voxia <span class="v-badge">V1.2</span></div>
+  <div class="app-name">Voxia</div>
   <span class="device-badge" id="device-badge"></span>
   <button class="hbtn" id="btn-save-session" title="Sauvegarder">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-  </button>
-  <button class="hbtn" id="btn-night" title="Mode nuit — ecran noir">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
   <button class="hbtn" id="btn-settings" title="Parametres">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
   </button>
 </div>
 
+<!-- ══ RECBAR — bouton nuit remplace le chip statut ══ -->
 <div class="recbar">
   <button class="rec-btn" id="btn-record">
     <div class="dot"></div>
     <span class="rl" id="rec-label">Demarrer</span>
   </button>
-  <div class="schip" id="status-chip">
-    <div class="blip"></div>
-    <span id="status-text">Pret</span>
-  </div>
   <span class="chrono" id="chrono">00:00</span>
+  <button class="hbtn-night" id="btn-night" title="Mode nuit — ecran noir">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
 </div>
 
 <div class="perm-banner" id="perm-banner">
@@ -563,19 +560,10 @@ body {
 
 <script>
 'use strict';
-/* ═══════════════════════════════════════════════════════
-   Voxia Web v1.2 — Version standalone avec detection
-   mobile / desktop et adaptation Web Speech API
-   ═══════════════════════════════════════════════════════ */
 
-/* ── DETECTION APPAREIL ─────────────────────────────────
- * IS_MOBILE = true  → telephone ou tablette
- *           = false → ordinateur de bureau / laptop
- * ──────────────────────────────────────────────────────── */
 const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
 
-/* Badge dans le header */
 const deviceBadge = document.getElementById('device-badge');
 if (IS_MOBILE) {
   deviceBadge.className = 'device-badge mobile';
@@ -585,7 +573,6 @@ if (IS_MOBILE) {
   deviceBadge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Desktop';
 }
 
-/* ═══ CONFIG ════════════════════════════════════════════ */
 const DEFAULTS = {
   apikey:'', lang:'fr-FR', model:'llama-3.3-70b-versatile',
   interval:60000, bufsize:200, temperature:0.6, maxtok:1500,
@@ -616,7 +603,7 @@ const cfgPanel=$('cfg-panel'), cfgBody=$('cfg-body');
 const permBanner=$('perm-banner'), permMsg=$('perm-msg');
 const transcript=$('transcript'), sumScroll=$('sum-scroll'), sumEmpty=$('sum-empty');
 const sumCountEl=$('sum-count'), tabBadge=$('tab-badge'), txMeta=$('tx-meta');
-const recLabel=$('rec-label'), statusChip=$('status-chip'), statusText=$('status-text');
+const recLabel=$('rec-label'), statusChip=null; // chip supprime
 const chrono=$('chrono'), waveIdle=$('wave-idle'), waveBars=$('wave-bars');
 const sessScroll=$('sess-scroll'), sessEmpty=$('sess-empty'), sessCount=$('sess-count');
 const modalSave=$('modal-save'), modalName=$('modal-sess-name');
@@ -629,7 +616,7 @@ const inpSensitivity=$('inp-sensitivity'), inpRawMode=$('inp-raw-mode');
 const btnNight=$('btn-night'), nightOverlay=$('night-overlay');
 let wakeLock=null, nightActive=false;
 
-/* ═══ STORAGE (localStorage) ════════════════════════════ */
+/* ═══ STORAGE ════════════════════════════════════════════ */
 function loadCfg(){
   Object.keys(DEFAULTS).forEach(k=>{
     const v=localStorage.getItem('vx_'+k);
@@ -708,25 +695,9 @@ async function loadModels(silent=false){
 }
 btnLoadMdls.addEventListener('click',()=>loadModels(false));
 
-/* ═══ PERMISSION MICRO ════════════════════════════════════
- *
- *  MOBILE  : On ne fait PAS de getUserMedia séparé.
- *            Web Speech API sur Android/iOS gère elle-même
- *            la permission au premier recognition.start().
- *            Un getUserMedia explicite crée des conflits
- *            et peut bloquer la reconnaissance.
- *
- *  DESKTOP : getUserMedia pour AudioContext (visualisation
- *            waveform) + déclenche la permission micro
- *            avant de lancer SpeechRecognition.
- * ══════════════════════════════════════════════════════════ */
+/* ═══ PERMISSION MICRO ════════════════════════════════════ */
 async function acquireMic(){
-  if(IS_MOBILE){
-    /* Mobile : pas de getUserMedia — Web Speech API suffit */
-    permDenied=false;
-    permBanner.classList.remove('show');
-    return true;
-  }
+  if(IS_MOBILE){permDenied=false;permBanner.classList.remove('show');return true}
   if(micStream) return true;
   try{
     micStream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -742,14 +713,13 @@ async function acquireMic(){
 }
 btnReqPerm.addEventListener('click',async()=>{permBanner.classList.remove('show');const ok=await acquireMic();if(!ok)permBanner.classList.add('show')});
 
-/* ═══ AUDIO VISUALISATION (desktop uniquement) ══════════ */
+/* ═══ AUDIO VIZ ══════════════════════════════════════════ */
 function startAudioViz(){
   if(IS_MOBILE||!micStream) return;
   try{
     audioCtx=new(window.AudioContext||window.webkitAudioContext)();
     analyser=audioCtx.createAnalyser();
-    analyser.fftSize=64;
-    analyser.smoothingTimeConstant=0.75;
+    analyser.fftSize=64; analyser.smoothingTimeConstant=0.75;
     const src=audioCtx.createMediaStreamSource(micStream);
     src.connect(analyser);
   }catch(e){analyser=null}
@@ -759,64 +729,33 @@ function stopAudioViz(){
   if(audioCtx){audioCtx.close();audioCtx=null;analyser=null}
 }
 
-/* ═══ WEB SPEECH API — ADAPTE MOBILE / DESKTOP ═══════════
- *
- *  La difference cle entre mobile et desktop :
- *
- *  DESKTOP  → continuous = true
- *    Le moteur Chrome reste actif en continu. Pas de coupure
- *    entre phrases. Comportement identique a l'extension.
- *
- *  MOBILE   → continuous = false  (comme le site de reference)
- *    Sur Android, continuous=true provoque souvent des crashes
- *    silencieux ou des reconnexions trop longues.
- *    Avec continuous=false : la reconnaissance s'arrete apres
- *    une pause, onend se declenche, et on restart immédiatement
- *    (100 ms). Le flux reste donc continu cote utilisateur.
- *    C'est exactement le pattern utilise dans le site de
- *    reference fourni et qui fonctionne bien sur Android.
- * ══════════════════════════════════════════════════════════ */
+/* ═══ SPEECH RECOGNITION ════════════════════════════════ */
 function buildRecog(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR) return null;
   const r=new SR();
-
-  r.lang=cfg.lang;
-  r.maxAlternatives=1;
-
-  if(IS_MOBILE){
-    r.continuous=false;           // meilleure compat Android
-    r.interimResults=cfg.rawMode!==1; // affichage live si mode normal
-  }else{
-    r.continuous=true;            // desktop : flux continu natif
-    r.interimResults=cfg.rawMode!==1;
-  }
+  r.lang=cfg.lang; r.maxAlternatives=1;
+  if(IS_MOBILE){r.continuous=false;r.interimResults=cfg.rawMode!==1}
+  else{r.continuous=true;r.interimResults=cfg.rawMode!==1}
 
   r.onresult=e=>{
     if(cfg.rawMode===1){
-      /* Mode brut : uniquement finaux */
       let chunk='';
       for(let i=e.resultIndex;i<e.results.length;i++){
         const conf=e.results[i][0].confidence;
         if(conf===0||cfg.sensitivity===0||conf>=cfg.sensitivity) chunk+=e.results[i][0].transcript+' ';
       }
-      if(chunk){
-        fullText+=chunk; buffer+=chunk;
-        updateTranscriptDisplay('');
+      if(chunk){fullText+=chunk;buffer+=chunk;updateTranscriptDisplay('');
         const wc=buffer.trim().split(/\s+/).filter(Boolean).length;
-        if(cfg.bufsize>0&&wc>=cfg.bufsize) doSummary();
-      }
+        if(cfg.bufsize>0&&wc>=cfg.bufsize) doSummary();}
       return;
     }
-    /* Mode normal : interim + final */
     let fin='',int_='';
     for(let i=e.resultIndex;i<e.results.length;i++){
       if(e.results[i].isFinal){
         const conf=e.results[i][0].confidence;
         if(conf===0||cfg.sensitivity===0||conf>=cfg.sensitivity) fin+=e.results[i][0].transcript+' ';
-      }else{
-        int_+=e.results[i][0].transcript;
-      }
+      }else{int_+=e.results[i][0].transcript}
     }
     lastInterim=int_;
     if(fin){fullText+=fin;buffer+=fin}
@@ -827,14 +766,10 @@ function buildRecog(){
 
   r.onend=()=>{
     if(isRec&&!permDenied){
-      /* Recupere l'interim si arret brutal */
       if(cfg.rawMode!==1&&lastInterim.trim()){
-        fullText+=lastInterim.trim()+' ';
-        buffer+=lastInterim.trim()+' ';
-        lastInterim='';
-        updateTranscriptDisplay('');
+        fullText+=lastInterim.trim()+' '; buffer+=lastInterim.trim()+' ';
+        lastInterim=''; updateTranscriptDisplay('');
       }
-      /* Restart — delai plus court sur mobile pour un flux fluide */
       setTimeout(()=>{try{r.start()}catch(e){}},IS_MOBILE?80:150);
     }
   };
@@ -845,9 +780,7 @@ function buildRecog(){
       permMsg.textContent='Permission micro refusee — cliquez Reessayer';
       permBanner.classList.add('show');
     }
-    /* 'no-speech' et 'network' sont normaux sur mobile — onend relance */
   };
-
   return r;
 }
 
@@ -864,17 +797,12 @@ function updateTranscriptDisplay(int_){
 btnRecord.addEventListener('click',()=>isRec?stop():start());
 
 async function start(){
-  const ok=await acquireMic();
-  if(!ok) return;
+  const ok=await acquireMic(); if(!ok) return;
   permDenied=false; lastInterim='';
   recog=buildRecog();
-  if(!recog){
-    alert('Reconnaissance vocale indisponible.\nSur Android : utilisez Chrome.\nSur iOS : utilisez Safari.');
-    return;
-  }
+  if(!recog){alert('Reconnaissance vocale indisponible.\nSur Android : utilisez Chrome.\nSur iOS : utilisez Safari.');return}
   try{recog.start()}catch(e){console.error('[Voxia]',e);return}
-  isRec=true; startUI();
-  startAudioViz();
+  isRec=true; startUI(); startAudioViz();
   elapsed=0; chrono.textContent='00:00';
   timerInt=setInterval(()=>{elapsed++;chrono.textContent=fmt(elapsed)},1000);
   if(cfg.interval>0) sumTimer=setInterval(doSummary,cfg.interval);
@@ -883,8 +811,7 @@ async function start(){
 
 async function stop(){
   if(recog) recog.stop();
-  isRec=false; stopUI();
-  stopAudioViz();
+  isRec=false; stopUI(); stopAudioViz();
   clearInterval(timerInt); clearInterval(sumTimer);
   if(buffer.trim().length>10) await doSummary();
   if(sumCount>0){btnFinal.disabled=false;btnFinal2.disabled=false}
@@ -894,14 +821,12 @@ async function stop(){
 
 function startUI(){
   btnRecord.classList.add('live'); recLabel.textContent='Arreter';
-  statusChip.classList.add('live'); statusText.textContent='En direct';
   chrono.classList.add('live');
   waveIdle.style.display='none'; waveBars.classList.add('on');
   animWave();
 }
 function stopUI(){
   btnRecord.classList.remove('live'); recLabel.textContent='Demarrer';
-  statusChip.classList.remove('live'); statusText.textContent='Pret';
   chrono.classList.remove('live');
   waveBars.classList.remove('on'); waveIdle.style.display='';
 }
@@ -915,7 +840,6 @@ function animWave(){
     analyser.getByteFrequencyData(data);
     bars.forEach((b,i)=>{const idx=Math.floor(i*data.length/bars.length);const val=data[idx]/255;b.style.height=(val*22+2)+'px';b.style.opacity=(0.15+val*0.85).toFixed(2)});
   }else{
-    /* Waveform animee simulee (mobile ou pas de stream) */
     bars.forEach(b=>{b.style.height=(Math.random()*18+2)+'px';b.style.opacity=(.2+Math.random()*.8).toFixed(2)});
   }
   vizRaf=requestAnimationFrame(animWave);
@@ -1158,36 +1082,49 @@ function updateSensSlider(){
 }
 sensSlider.addEventListener('input',updateSensSlider);
 
-/* ═══ NIGHT MODE — ecran noir + wake lock ═══════════════
- *  - Wake Lock API : CPU reste actif, micro continue
- *  - Fullscreen    : barres systeme cachees
- *  - Overlay noir  : ecran visuellement eteint
- *  - Tap n'importe ou pour quitter
- * ══════════════════════════════════════════════════════════ */
+/* ═══ NIGHT MODE ═════════════════════════════════════════
+ *  Cache TOUT : overlay noir + barre de nav Android
+ *  via Capacitor NavigationBar + StatusBar hide
+ * ═════════════════════════════════════════════════════════ */
 async function capHideBars(){
-  try{if(window.Capacitor?.Plugins?.StatusBar) await window.Capacitor.Plugins.StatusBar.hide()}catch(e){}
-  try{if(window.Capacitor?.Plugins?.NavigationBar) await window.Capacitor.Plugins.NavigationBar.hide()}catch(e){}
+  try{
+    const SB=window.Capacitor?.Plugins?.StatusBar;
+    if(SB) await SB.hide();
+  }catch(e){}
+  try{
+    const NB=window.Capacitor?.Plugins?.NavigationBar;
+    if(NB){
+      /* @capgo/capacitor-navigation-bar API */
+      if(typeof NB.hide==='function') await NB.hide();
+      else if(typeof NB.setTransparency==='function') await NB.setTransparency({isTransparent:true});
+    }
+  }catch(e){}
 }
 async function capShowBars(){
-  try{if(window.Capacitor?.Plugins?.StatusBar) await window.Capacitor.Plugins.StatusBar.show()}catch(e){}
-  try{if(window.Capacitor?.Plugins?.NavigationBar) await window.Capacitor.Plugins.NavigationBar.show()}catch(e){}
+  try{
+    const SB=window.Capacitor?.Plugins?.StatusBar;
+    if(SB) await SB.show();
+  }catch(e){}
+  try{
+    const NB=window.Capacitor?.Plugins?.NavigationBar;
+    if(NB){
+      if(typeof NB.show==='function') await NB.show();
+      else if(typeof NB.setColor==='function') await NB.setColor({color:'#08080d',darkButtons:false});
+    }
+  }catch(e){}
 }
 
 async function enterNightMode(){
   if(nightActive) return;
   nightActive=true;
-  /* Hint animé — recréé à chaque fois pour relancer l'animation */
   nightOverlay.innerHTML='<div class="night-hint">Appuyez pour quitter<br><span style="font-size:9px;opacity:.7;letter-spacing:.08em">Le micro continue d\'enregistrer</span></div>';
   nightOverlay.classList.add('on');
   btnNight.classList.add('night-on');
-  /* Wake Lock — empêche le CPU de dormir, micro reste actif */
   try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
-  /* Fullscreen pour masquer status bar + nav bar */
   try{
     if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'});
     else if(document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
   }catch(e){}
-  /* Capacitor : hide native bars */
   await capHideBars();
 }
 
@@ -1196,18 +1133,14 @@ async function exitNightMode(){
   nightActive=false;
   nightOverlay.classList.remove('on');
   btnNight.classList.remove('night-on');
-  /* Libérer wake lock */
   if(wakeLock){try{await wakeLock.release()}catch(e){} wakeLock=null;}
-  /* Quitter fullscreen */
   try{if(document.exitFullscreen&&document.fullscreenElement) await document.exitFullscreen()}catch(e){}
-  /* Capacitor : remettre les barres */
   await capShowBars();
 }
 
 btnNight.addEventListener('click',()=>nightActive?exitNightMode():enterNightMode());
 nightOverlay.addEventListener('click',exitNightMode);
 
-/* Relancer wake lock si interrompu (appel entrant, etc.) */
 document.addEventListener('visibilitychange',async()=>{
   if(wakeLock===null&&nightActive&&document.visibilityState==='visible'){
     try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
@@ -1223,7 +1156,6 @@ if(cfg.apikey) loadModels(true);
     try {
       const { StatusBar } = window.Capacitor?.Plugins || {};
       const { NavigationBar } = window.Capacitor?.Plugins || {};
-
       if (StatusBar) {
         await StatusBar.setStyle({ style: 'DARK' });
         await StatusBar.setBackgroundColor({ color: '#08080d' });
