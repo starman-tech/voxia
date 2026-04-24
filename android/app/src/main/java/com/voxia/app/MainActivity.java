@@ -8,7 +8,6 @@ import android.view.WindowInsetsController;
 import android.view.Window;
 import com.getcapacitor.BridgeActivity;
 
-
 public class MainActivity extends BridgeActivity {
 
     public static boolean nightMode = false;
@@ -16,11 +15,11 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        instance = this;
+        // ⚠️ registerPlugin AVANT super.onCreate — obligatoire avec Capacitor
         registerPlugin(NightModePlugin.class);
         registerPlugin(VoxiaGarminPlugin.class);
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); // ← une seule fois
+        instance = this;
     }
 
     public static void setNightMode(boolean enabled) {
@@ -28,7 +27,6 @@ public class MainActivity extends BridgeActivity {
         if (instance != null) {
             instance.runOnUiThread(() -> {
                 instance.applySystemUI();
-                // Double appel après délai pour contrer le re-show Android
                 instance.getWindow().getDecorView().postDelayed(
                     () -> instance.applySystemUI(), 300
                 );
@@ -70,9 +68,7 @@ public class MainActivity extends BridgeActivity {
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                 );
             } else {
-                v.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                );
+                v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             }
         }
     }
