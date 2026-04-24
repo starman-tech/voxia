@@ -8,6 +8,7 @@ import android.view.WindowInsetsController;
 import android.view.Window;
 import com.getcapacitor.BridgeActivity;
 
+
 public class MainActivity extends BridgeActivity {
 
     public static boolean nightMode = false;
@@ -18,6 +19,8 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
         instance = this;
         registerPlugin(NightModePlugin.class);
+        registerPlugin(VoxiaGarminPlugin.class);
+        super.onCreate(savedInstanceState);
     }
 
     public static void setNightMode(boolean enabled) {

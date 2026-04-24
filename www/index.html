@@ -25,7 +25,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @media(max-width:600px){.app{max-width:480px}}
 body{background:#08080d}
 
-.header{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--s1);border-bottom:1px solid var(--ba);flex-shrink:0}
+.header{display:flex;align-items:center;gap:10px;padding:15px 16px;background:var(--s1);border-bottom:1px solid var(--ba);flex-shrink:0}
 .logo{width:36px;height:36px;border-radius:10px;background:var(--alo);border:1.5px solid var(--ba);display:flex;align-items:center;justify-content:center;color:var(--a);flex-shrink:0}
 .logo svg{width:17px;height:17px}
 .app-name{font-size:20px;font-weight:700;letter-spacing:-.5px;color:var(--t1);flex:1}
@@ -38,6 +38,13 @@ body{background:#08080d}
 .hbtn:hover{background:var(--amd);border-color:var(--ba2)}
 .hbtn.on{background:var(--amd);border-color:var(--ba2)}
 
+/* ── GARMIN BADGE ── */
+.garmin-badge{font-size:10px;font-weight:500;letter-spacing:.05em;padding:3px 8px;border-radius:5px;display:flex;align-items:center;gap:5px;background:var(--s3);border:1px solid var(--ln2);color:var(--t3);transition:all .3s var(--ease);cursor:default;flex-shrink:0;white-space:nowrap}
+.garmin-badge svg{width:11px;height:11px;flex-shrink:0}
+.garmin-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:background .3s}
+.garmin-badge.connected{color:var(--grn);border-color:rgba(61,184,122,.3);background:rgba(61,184,122,.08)}
+.garmin-badge.connected .garmin-dot{background:var(--grn);box-shadow:0 0 5px var(--grn)}
+
 /* ── RECBAR ── */
 .recbar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--s1);border-bottom:1px solid var(--ln);flex-shrink:0}
 .rec-btn{display:flex;align-items:center;gap:10px;padding:0 18px;height:40px;background:var(--s3);border:1.5px solid var(--ln2);border-radius:var(--r);color:var(--t1);cursor:pointer;font-family:var(--fn);font-size:14px;font-weight:600;transition:all .2s var(--ease);position:relative;overflow:hidden;flex-shrink:0}
@@ -49,16 +56,24 @@ body{background:#08080d}
 .rec-btn.live::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(217,85,85,.05),transparent);animation:sheen 2.5s ease-in-out infinite}
 @keyframes pdot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.5);opacity:.2}}
 @keyframes sheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-/* chrono prend l'espace du milieu */
 .chrono{font-family:var(--fm);font-size:15px;font-weight:500;letter-spacing:.14em;color:var(--t3);margin-left:auto;transition:color .2s;min-width:48px;text-align:right}
 .chrono.live{color:var(--red)}
-
-/* bouton nuit dans la recbar */
 .hbtn-night{width:38px;height:38px;border-radius:var(--r);border:1.5px solid var(--ba);background:var(--alo);color:var(--a);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s var(--ease);flex-shrink:0}
 .hbtn-night svg{width:17px;height:17px;pointer-events:none}
 .hbtn-night:hover{background:var(--amd);border-color:var(--ba2)}
 .hbtn-night.night-on{background:rgba(20,15,35,.9);border-color:rgba(140,80,220,.5);color:#a070e8}
+
+/* ── MIC ROW (sélecteur micro Bluetooth) ── */
+.mic-row{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--s1);border-bottom:1px solid var(--ln);flex-shrink:0}
+.mic-lbl{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.mic-lbl svg{width:11px;height:11px;opacity:.55}
+.mic-sel{flex:1;min-width:0;background:var(--s3);border:1.5px solid var(--ln2);border-radius:7px;color:var(--t1);font-family:var(--fn);font-size:12px;padding:5px 10px;outline:none;-webkit-appearance:none;cursor:pointer;transition:border-color .16s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mic-sel:focus{border-color:var(--ba);box-shadow:0 0 0 2px var(--alo)}
+.mic-sel option{background:var(--s3)}
+.mic-rf{width:30px;height:30px;flex-shrink:0;background:var(--alo);border:1.5px solid var(--ba);border-radius:6px;color:var(--a);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s var(--ease)}
+.mic-rf svg{width:12px;height:12px}
+.mic-rf:hover{background:var(--amd)}
+.mic-rf.spin svg{animation:rot .7s linear infinite}
 
 .perm-banner{display:none;align-items:center;gap:9px;padding:10px 16px;background:var(--rlo);border-bottom:1px solid var(--rba);color:var(--red);font-size:12px;flex-shrink:0}
 .perm-banner.show{display:flex}
@@ -204,12 +219,17 @@ body{background:#08080d}
 #night-overlay.on{display:flex;align-items:center;justify-content:center}
 .night-hint{color:rgba(255,255,255,.15);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--fm);text-align:center;pointer-events:none;animation:nfadeout 3s ease-out 2s both;padding:0 30px;line-height:1.9}
 @keyframes nfadeout{0%{opacity:1}100%{opacity:0}}
+
+/* ── GARMIN STATUS ROW dans les settings ── */
+.garmin-status-row{display:flex;align-items:center;gap:8px;padding:8px 0}
+.garmin-cfg-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:background .3s}
+.garmin-cfg-dot.on{background:var(--grn);box-shadow:0 0 6px var(--grn)}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ══ HEADER — sans badge V1.2, sans bouton nuit ══ -->
+<!-- ══ HEADER ══ -->
 <div class="header">
   <div class="logo">
     <svg viewBox="0 0 24 24" fill="none">
@@ -221,6 +241,18 @@ body{background:#08080d}
   </div>
   <div class="app-name">Voxia</div>
   <span class="device-badge" id="device-badge"></span>
+
+  <!-- Badge Garmin (connexion montre) -->
+  <div class="garmin-badge" id="garmin-badge" title="Montre Garmin Quatix 7">
+    <div class="garmin-dot" id="garmin-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
+      <line x1="12" y1="3" x2="12" y2="1"/><line x1="12" y1="23" x2="12" y2="21"/>
+      <line x1="3" y1="12" x2="1" y2="12"/><line x1="23" y1="12" x2="21" y2="12"/>
+    </svg>
+    <span id="garmin-badge-text">Garmin</span>
+  </div>
+
   <button class="hbtn" id="btn-save-session" title="Sauvegarder">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
   </button>
@@ -229,7 +261,7 @@ body{background:#08080d}
   </button>
 </div>
 
-<!-- ══ RECBAR — bouton nuit remplace le chip statut ══ -->
+<!-- ══ RECBAR ══ -->
 <div class="recbar">
   <button class="rec-btn" id="btn-record">
     <div class="dot"></div>
@@ -238,6 +270,26 @@ body{background:#08080d}
   <span class="chrono" id="chrono">00:00</span>
   <button class="hbtn-night" id="btn-night" title="Mode nuit — ecran noir">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+</div>
+
+<!-- ══ MIC ROW — sélecteur micro Bluetooth ══ -->
+<div class="mic-row">
+  <span class="mic-lbl">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+    </svg>
+    Micro
+  </span>
+  <select class="mic-sel" id="mic-select">
+    <option value="">Micro par defaut</option>
+  </select>
+  <button class="mic-rf" id="mic-rf-btn" title="Rafraichir les micros disponibles">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <polyline points="1 4 1 10 7 10"/>
+      <path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+    </svg>
   </button>
 </div>
 
@@ -344,6 +396,7 @@ body{background:#08080d}
   </div>
 </div>
 
+<!-- ══ PANNEAU PARAMÈTRES ══ -->
 <div class="cfg" id="cfg-panel">
   <div class="cfg-top">
     <button class="hbtn" id="btn-back-cfg">
@@ -352,6 +405,8 @@ body{background:#08080d}
     <span class="cfg-top-title">Parametres</span>
   </div>
   <div class="cfg-body" id="cfg-body">
+
+    <!-- API Groq -->
     <div class="sg">
       <div class="sg-t">API Groq</div>
       <div class="sf">
@@ -371,10 +426,30 @@ body{background:#08080d}
           <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
           <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
           <option value="openai/gpt-oss-20b">openai/gpt-oss-20b</option>
-          <option value="qwen/qwen3-32b">qwen/qwen3-32b</option>
+          <option value="qwen-qwq-32b">qwen-qwq-32b</option>
         </select>
       </div>
     </div>
+
+    <!-- Micro -->
+    <div class="sg">
+      <div class="sg-t">Microphone</div>
+      <div class="sf">
+        <div class="sl">Peripherique d'entree</div>
+        <div class="sd">Selectionnez votre micro Bluetooth ou USB. Rafraichissez apres connexion BT.</div>
+        <div class="srow" style="margin-top:4px">
+          <select class="ss" id="inp-mic-settings">
+            <option value="">Micro par defaut</option>
+          </select>
+          <button class="sib" id="btn-rf-mic-settings" title="Rafraichir">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+          </button>
+        </div>
+        <div class="mst" id="mic-status"></div>
+      </div>
+    </div>
+
+    <!-- Transcription -->
     <div class="sg">
       <div class="sg-t">Transcription</div>
       <div class="sf">
@@ -429,6 +504,8 @@ body{background:#08080d}
         </select>
       </div>
     </div>
+
+    <!-- Resumes IA -->
     <div class="sg">
       <div class="sg-t">Resumes IA</div>
       <div class="sf">
@@ -470,6 +547,8 @@ body{background:#08080d}
         <textarea class="sta" id="inp-prompt-final" rows="4"></textarea>
       </div>
     </div>
+
+    <!-- Options -->
     <div class="sg">
       <div class="sg-t">Options</div>
       <div class="sf">
@@ -491,6 +570,57 @@ body{background:#08080d}
         <input type="text" class="si" id="inp-sess-prefix" placeholder="Session"/>
       </div>
     </div>
+
+    <!-- ══ GARMIN QUATIX 7 ══ -->
+    <div class="sg">
+      <div class="sg-t">Montre Garmin (Quatix 7)</div>
+      <div class="sf">
+        <div class="sl">Statut connexion</div>
+        <div class="garmin-status-row">
+          <div class="garmin-cfg-dot" id="garmin-cfg-dot"></div>
+          <span id="garmin-cfg-text" style="font-size:11px;color:var(--t3)">Non connecte</span>
+        </div>
+        <div class="sd">
+          Ouvrez <strong style="color:var(--t2)">Garmin Connect</strong> sur ce telephone.
+          Lancez le widget <strong style="color:var(--t2)">VoxiaWatch</strong> sur votre Quatix 7.
+          La montre peut alors demarrer et arreter l'enregistrement a distance.
+        </div>
+      </div>
+      <div class="sf">
+        <label class="tog-row" for="inp-garmin-send">
+          <span class="tog-label">
+            <span class="tog-name">Envoi transcription a la montre</span>
+            <span class="tog-sub">Apres chaque arret, envoie le texte sur le Quatix 7.</span>
+          </span>
+          <span class="tog-wrap">
+            <input type="checkbox" id="inp-garmin-send" checked/>
+            <span class="tog-pill"></span>
+          </span>
+        </label>
+      </div>
+      <div class="sf">
+        <label class="tog-row" for="inp-garmin-ctrl">
+          <span class="tog-label">
+            <span class="tog-name">Controle depuis la montre</span>
+            <span class="tog-sub">La montre peut envoyer des commandes start / stop.</span>
+          </span>
+          <span class="tog-wrap">
+            <input type="checkbox" id="inp-garmin-ctrl" checked/>
+            <span class="tog-pill"></span>
+          </span>
+        </label>
+      </div>
+      <div class="sf">
+        <div class="sl">Longueur max envoyee a la montre</div>
+        <select class="ss" id="inp-garmin-len">
+          <option value="200">200 caracteres</option>
+          <option value="400" selected>400 caracteres</option>
+          <option value="600">600 caracteres</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- A propos -->
     <div class="sg">
       <div class="sg-t">A propos</div>
       <div class="sf">
@@ -505,6 +635,7 @@ body{background:#08080d}
           <span class="atag">Web Speech API</span>
           <span class="atag">Groq LLM</span>
           <span class="atag">Mobile Ready</span>
+          <span class="atag">Garmin Connect</span>
           <span class="atag">Open Source</span>
         </div>
       </div>
@@ -514,20 +645,14 @@ body{background:#08080d}
           <span class="clink-icon">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.1.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
           </span>
-          <span class="clink-body">
-            <span class="clink-name">Discord</span>
-            <span class="clink-sub">s.t.a.r_man</span>
-          </span>
+          <span class="clink-body"><span class="clink-name">Discord</span><span class="clink-sub">s.t.a.r_man</span></span>
           <svg class="clink-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
         <a class="clink" href="https://instagram.com/matteocean" target="_blank" rel="noopener" style="--cc:#e1306c;--cclo:rgba(225,48,108,.12)">
           <span class="clink-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
           </span>
-          <span class="clink-body">
-            <span class="clink-name">Instagram</span>
-            <span class="clink-sub">@matteocean</span>
-          </span>
+          <span class="clink-body"><span class="clink-name">Instagram</span><span class="clink-sub">@matteocean</span></span>
           <svg class="clink-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
       </div>
@@ -561,6 +686,7 @@ body{background:#08080d}
 <script>
 'use strict';
 
+/* ═══ DEVICE DETECTION ══════════════════════════════════ */
 const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
 
@@ -573,6 +699,7 @@ if (IS_MOBILE) {
   deviceBadge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Desktop';
 }
 
+/* ═══ DEFAULTS ═══════════════════════════════════════════ */
 const DEFAULTS = {
   apikey:'', lang:'fr-FR', model:'llama-3.3-70b-versatile',
   interval:60000, bufsize:200, temperature:0.6, maxtok:1500,
@@ -589,6 +716,7 @@ let curSession=null, sessions=[];
 let lastInterim='';
 let audioCtx=null, analyser=null, vizRaf=null;
 
+/* ═══ REFS DOM ═══════════════════════════════════════════ */
 const $=id=>document.getElementById(id);
 const btnRecord=$('btn-record'), btnSettings=$('btn-settings'), btnBackCfg=$('btn-back-cfg');
 const btnSaveCfg=$('btn-save-cfg'), btnLoadMdls=$('btn-load-models');
@@ -603,7 +731,7 @@ const cfgPanel=$('cfg-panel'), cfgBody=$('cfg-body');
 const permBanner=$('perm-banner'), permMsg=$('perm-msg');
 const transcript=$('transcript'), sumScroll=$('sum-scroll'), sumEmpty=$('sum-empty');
 const sumCountEl=$('sum-count'), tabBadge=$('tab-badge'), txMeta=$('tx-meta');
-const recLabel=$('rec-label'), statusChip=null; // chip supprime
+const recLabel=$('rec-label');
 const chrono=$('chrono'), waveIdle=$('wave-idle'), waveBars=$('wave-bars');
 const sessScroll=$('sess-scroll'), sessEmpty=$('sess-empty'), sessCount=$('sess-count');
 const modalSave=$('modal-save'), modalName=$('modal-sess-name');
@@ -615,6 +743,21 @@ const inpPrefix=$('inp-sess-prefix'), inpPromSum=$('inp-prompt-sum'), inpPromFin
 const inpSensitivity=$('inp-sensitivity'), inpRawMode=$('inp-raw-mode');
 const btnNight=$('btn-night'), nightOverlay=$('night-overlay');
 let wakeLock=null, nightActive=false;
+
+/* ── Refs Garmin + Micro ─── */
+const micSelect      = $('mic-select');
+const micRfBtn       = $('mic-rf-btn');
+const inpMicSettings = $('inp-mic-settings');
+const btnRfMicSett   = $('btn-rf-mic-settings');
+const micStatusEl    = $('mic-status');
+const garminBadge    = $('garmin-badge');
+const garminDot      = $('garmin-dot');
+const garminBadgeTxt = $('garmin-badge-text');
+const garminCfgDot   = $('garmin-cfg-dot');
+const garminCfgTxt   = $('garmin-cfg-text');
+const inpGarminSend  = $('inp-garmin-send');
+const inpGarminCtrl  = $('inp-garmin-ctrl');
+const inpGarminLen   = $('inp-garmin-len');
 
 /* ═══ STORAGE ════════════════════════════════════════════ */
 function loadCfg(){
@@ -652,23 +795,28 @@ function saveCfg(){
   cfg.promptSum=inpPromSum.value.trim()||DEFAULTS.promptSum;
   cfg.promptFinal=inpPromFin.value.trim()||DEFAULTS.promptFinal;
   Object.keys(DEFAULTS).forEach(k=>localStorage.setItem('vx_'+k,cfg[k]));
+  // Sync sélecteur micro
+  if(inpMicSettings.value!==micSelect.value){
+    micSelect.value=inpMicSettings.value;
+    localStorage.setItem('vx_mic_device',inpMicSettings.value);
+  }
 }
 function storeSessions(){localStorage.setItem('vx_sessions',JSON.stringify(sessions))}
 
-/* ═══ TABS ══════════════════════════════════════════════ */
+/* ═══ TABS ═══════════════════════════════════════════════ */
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 function switchTab(n){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===n));
   document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='panel-'+n));
 }
 
-/* ═══ SETTINGS ══════════════════════════════════════════ */
+/* ═══ SETTINGS ═══════════════════════════════════════════ */
 btnSettings.addEventListener('click',()=>{cfgPanel.classList.add('on');btnSettings.classList.add('on');cfgBody.scrollTop=0;setTimeout(()=>inpApiKey.focus(),50)});
 btnBackCfg.addEventListener('click',closeCfg);
 function closeCfg(){cfgPanel.classList.remove('on');btnSettings.classList.remove('on')}
 btnSaveCfg.addEventListener('click',()=>{saveCfg();closeCfg();saveOk.textContent='Sauvegarde !';setTimeout(()=>saveOk.textContent='',3000)});
 
-/* ═══ LOAD MODELS ═══════════════════════════════════════ */
+/* ═══ LOAD MODELS ════════════════════════════════════════ */
 const FALLBACK_MODELS=['gemma2-9b-it','llama-3.1-8b-instant','llama-3.3-70b-versatile','llama3-70b-8192','llama3-8b-8192','meta-llama/llama-4-maverick-17b-128e-instruct','meta-llama/llama-4-scout-17b-16e-instruct','mistral-saba-24b','mixtral-8x7b-32768','openai/gpt-oss-120b','qwen-qwq-32b'].map(id=>({id}));
 function populateModelSelect(list){
   const current=inpModel.value||cfg.model;
@@ -695,23 +843,136 @@ async function loadModels(silent=false){
 }
 btnLoadMdls.addEventListener('click',()=>loadModels(false));
 
-/* ═══ PERMISSION MICRO ════════════════════════════════════ */
-async function acquireMic(){
-  if(IS_MOBILE){permDenied=false;permBanner.classList.remove('show');return true}
-  if(micStream) return true;
-  try{
-    micStream=await navigator.mediaDevices.getUserMedia({audio:true});
-    permDenied=false; permBanner.classList.remove('show');
+/* ═══ MICRO SELECTOR — Bluetooth / USB / interne ════════════════════════════
+   Gère les deux sélecteurs (recbar + settings) de façon synchronisée.
+═══════════════════════════════════════════════════════════════════════════ */
+async function populateMics(showStatus=false) {
+  micRfBtn.classList.add('spin');
+  if(btnRfMicSett) btnRfMicSett.classList.add('spin');
+  try {
+    // Demander la permission d'abord (nécessaire pour avoir les labels)
+    if (!IS_MOBILE) {
+      try { await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch(e) { /* peut être déjà accordé ou refusé */ }
+    }
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const mics = devices.filter(d => d.kind === 'audioinput');
+    const saved = localStorage.getItem('vx_mic_device') || '';
+
+    // Remplit les deux sélecteurs
+    [micSelect, inpMicSettings].forEach(sel => {
+      if (!sel) return;
+      sel.innerHTML = '<option value="">Micro par defaut</option>';
+      mics.forEach((mic, i) => {
+        const opt = document.createElement('option');
+        opt.value = mic.deviceId;
+        const raw = mic.label || `Micro ${i + 1}`;
+        let label = raw.length > 52 ? raw.substring(0, 50) + '…' : raw;
+        // Détection Bluetooth / communications
+        if (mic.deviceId === 'communications') label = '🎧 ' + label;
+        else if (/bluetooth|bt|bth|airpod|galaxy buds|jabra|poly|sennheiser|sony wh|bose|jbl|samsung/i.test(raw)) label = '📡 ' + label;
+        else if (/usb|c-media|focusrite|behringer|scarlett|motu|universal audio/i.test(raw)) label = '🔌 ' + label;
+        opt.textContent = label;
+        sel.appendChild(opt);
+      });
+      // Restaurer la sélection
+      if (saved && Array.from(sel.options).some(o => o.value === saved)) {
+        sel.value = saved;
+      }
+    });
+
+    if (showStatus && micStatusEl) {
+      const n = mics.length;
+      micStatusEl.textContent = `${n} peripherique${n!==1?'s':''} detecte${n!==1?'s':''}`;
+      micStatusEl.className = 'mst';
+      setTimeout(() => { if(micStatusEl) micStatusEl.textContent = ''; }, 3000);
+    }
+  } catch(e) {
+    console.warn('[Voxia] enumerateDevices:', e);
+  } finally {
+    micRfBtn.classList.remove('spin');
+    if(btnRfMicSett) btnRfMicSett.classList.remove('spin');
+  }
+}
+
+// Synchro entre les deux sélecteurs
+function onMicChange(val) {
+  localStorage.setItem('vx_mic_device', val);
+  if (micStream) { micStream.getTracks().forEach(t=>t.stop()); micStream=null; }
+  if (micSelect && micSelect.value !== val) micSelect.value = val;
+  if (inpMicSettings && inpMicSettings.value !== val) inpMicSettings.value = val;
+}
+if(micSelect) micSelect.addEventListener('change', () => onMicChange(micSelect.value));
+if(inpMicSettings) inpMicSettings.addEventListener('change', () => onMicChange(inpMicSettings.value));
+if(micRfBtn) micRfBtn.addEventListener('click', () => populateMics(false));
+if(btnRfMicSett) btnRfMicSett.addEventListener('click', () => populateMics(true));
+
+// Peupler au démarrage si la permission est déjà accordée
+navigator.mediaDevices.enumerateDevices().then(devices => {
+  if (devices.some(d => d.kind === 'audioinput' && d.label)) {
+    populateMics(false);
+  } else {
+    // Restaurer le dernier choix sans label
+    const saved = localStorage.getItem('vx_mic_device');
+    if (saved && saved !== '') {
+      [micSelect, inpMicSettings].forEach(sel => {
+        if (!sel) return;
+        const opt = document.createElement('option');
+        opt.value = saved; opt.textContent = 'Micro (sauvegarde)';
+        sel.appendChild(opt);
+        sel.value = saved;
+      });
+    }
+  }
+});
+
+/* ═══ PERMISSION MICRO ══════════════════════════════════════════════════════
+   Version étendue : supporte deviceId pour Bluetooth.
+═══════════════════════════════════════════════════════════════════════════ */
+async function acquireMic() {
+  if (IS_MOBILE) { permDenied=false; permBanner.classList.remove('show'); return true; }
+  const deviceId = micSelect ? micSelect.value : '';
+  const constraints = { audio: deviceId ? { deviceId: { exact: deviceId } } : true };
+
+  // Si le stream est déjà ouvert avec le bon device, réutiliser
+  if (micStream) {
+    const track = micStream.getAudioTracks()[0];
+    const settings = track ? track.getSettings() : {};
+    if (!deviceId || settings.deviceId === deviceId) return true;
+    // Mauvais device → fermer et réouvrir
+    micStream.getTracks().forEach(t => t.stop());
+    micStream = null;
+  }
+
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia(constraints);
+    permDenied = false;
+    permBanner.classList.remove('show');
+    // Profiter de la permission pour peupler les micros avec les vrais labels
+    populateMics(false);
     return true;
-  }catch(err){
-    permMsg.textContent=err.name==='NotAllowedError'
-      ?'Permission micro refusee. Autorisez le micro dans votre navigateur.'
-      :'Micro indisponible : '+err.message;
+  } catch(err) {
+    // Fallback : micro par défaut si le device BT est indisponible
+    if ((err.name === 'OverconstrainedError' || err.name === 'NotFoundError') && deviceId) {
+      console.warn('[Voxia] Device BT indisponible, fallback micro par defaut');
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        permBanner.classList.remove('show');
+        return true;
+      } catch(e2) { err = e2; }
+    }
+    permMsg.textContent = err.name === 'NotAllowedError'
+      ? 'Permission micro refusee. Autorisez le micro dans votre navigateur.'
+      : 'Micro indisponible : ' + err.message;
     permBanner.classList.add('show');
     return false;
   }
 }
-btnReqPerm.addEventListener('click',async()=>{permBanner.classList.remove('show');const ok=await acquireMic();if(!ok)permBanner.classList.add('show')});
+btnReqPerm.addEventListener('click', async () => {
+  permBanner.classList.remove('show');
+  const ok = await acquireMic();
+  if (!ok) permBanner.classList.add('show');
+});
 
 /* ═══ AUDIO VIZ ══════════════════════════════════════════ */
 function startAudioViz(){
@@ -794,7 +1055,7 @@ function updateTranscriptDisplay(int_){
 }
 
 /* ═══ RECORD ════════════════════════════════════════════ */
-btnRecord.addEventListener('click',()=>isRec?stop():start());
+// btnRecord handler défini APRÈS les fonctions start/stop (plus bas)
 
 async function start(){
   const ok=await acquireMic(); if(!ok) return;
@@ -807,17 +1068,29 @@ async function start(){
   timerInt=setInterval(()=>{elapsed++;chrono.textContent=fmt(elapsed)},1000);
   if(cfg.interval>0) sumTimer=setInterval(doSummary,cfg.interval);
   btnSumNow.disabled=false; btnSumNow2.disabled=false;
+  // Notifier la montre
+  sendGarminStatus('recording');
+  startGarminSync();
 }
 
 async function stop(){
   if(recog) recog.stop();
   isRec=false; stopUI(); stopAudioViz();
   clearInterval(timerInt); clearInterval(sumTimer);
+  stopGarminSync();
   if(buffer.trim().length>10) await doSummary();
   if(sumCount>0){btnFinal.disabled=false;btnFinal2.disabled=false}
   btnSumNow.disabled=true; btnSumNow2.disabled=true;
   if(cfg.autosave===1&&fullText.trim()) await saveSessionData(`${cfg.sessPrefix} — ${nowDate()}`);
+  // Envoyer la transcription à la montre Garmin
+  if(inpGarminSend && inpGarminSend.checked) {
+    const maxLen = inpGarminLen ? parseInt(inpGarminLen.value) : 400;
+    const txt = fullText.trim().substring(0, maxLen);
+    await sendGarminStatus('idle', txt);
+  }
 }
+
+btnRecord.addEventListener('click', () => isRec ? stop() : start());
 
 function startUI(){
   btnRecord.classList.add('live'); recLabel.textContent='Arreter';
@@ -845,7 +1118,7 @@ function animWave(){
   vizRaf=requestAnimationFrame(animWave);
 }
 
-/* ═══ GROQ STREAM ═══════════════════════════════════════ */
+/* ═══ GROQ STREAM ════════════════════════════════════════ */
 async function groqStream(system,user,onDelta){
   const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
@@ -866,7 +1139,7 @@ async function groqStream(system,user,onDelta){
   return full;
 }
 
-/* ═══ SUMMARY ═══════════════════════════════════════════ */
+/* ═══ SUMMARY ════════════════════════════════════════════ */
 async function doSummary(isFinal=false,override=null){
   let text=(override||buffer).trim(); if(text.length<10) return;
   if(!isFinal) buffer='';
@@ -930,7 +1203,7 @@ btnCopyAll.addEventListener('click',async()=>{
   }catch(e){}
 });
 
-/* ═══ SESSIONS ══════════════════════════════════════════ */
+/* ═══ SESSIONS ═══════════════════════════════════════════ */
 btnSaveSess.addEventListener('click',()=>{
   if(!fullText.trim()) return;
   modalName.value=`${cfg.sessPrefix} — ${nowDate()}`;
@@ -1005,7 +1278,7 @@ function renderSessions(){
   sessScroll.querySelectorAll('.bd').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();sessions=sessions.filter(s=>s.id!==b.dataset.id);storeSessions();renderSessions()}));
 }
 
-/* ═══ IMPORT JSON ═══════════════════════════════════════ */
+/* ═══ IMPORT JSON ════════════════════════════════════════ */
 btnImportJson.addEventListener('click',()=>inpImportJson.click());
 inpImportJson.addEventListener('change',async e=>{
   const file=e.target.files[0]; if(!file) return;
@@ -1082,107 +1355,166 @@ function updateSensSlider(){
 }
 sensSlider.addEventListener('input',updateSensSlider);
 
-/* ═══ NIGHT MODE ═════════════════════════════════════════
- *  Cache TOUT : overlay noir + barre de nav Android
- *  via Capacitor NavigationBar + StatusBar hide
- * ═════════════════════════════════════════════════════════ */
+/* ═══ NIGHT MODE ══════════════════════════════════════════ */
 async function capHideBars() {
-    try {
-        // Plugin custom NightMode
-        await window.Capacitor?.Plugins?.NightMode?.enable();
-    } catch(e) {}
-    try {
-        const SB = window.Capacitor?.Plugins?.StatusBar;
-        if (SB) await SB.hide();
-    } catch(e) {}
+  try { await window.Capacitor?.Plugins?.NightMode?.enable(); } catch(e) {}
+  try { const SB=window.Capacitor?.Plugins?.StatusBar; if(SB) await SB.hide(); } catch(e) {}
 }
-
 async function capShowBars() {
-    try {
-        await window.Capacitor?.Plugins?.NightMode?.disable();
-    } catch(e) {}
-    try {
-        const SB = window.Capacitor?.Plugins?.StatusBar;
-        if (SB) await SB.show();
-    } catch(e) {}
+  try { await window.Capacitor?.Plugins?.NightMode?.disable(); } catch(e) {}
+  try { const SB=window.Capacitor?.Plugins?.StatusBar; if(SB) await SB.show(); } catch(e) {}
 }
 async function enterNightMode(){
   if(nightActive) return;
-  nightActive = true;
-  window.__nightMode = true;                    // flag lu par le natif
-  nightOverlay.innerHTML = '';
-  nightOverlay.classList.add('on');
+  nightActive=true; window.__nightMode=true;
+  nightOverlay.innerHTML=''; nightOverlay.classList.add('on');
   btnNight.classList.add('night-on');
-  // Wake Lock
-  try { wakeLock = await navigator.wakeLock.request('screen') } catch(e) {}
-  // Fullscreen web
-  try {
-    if(document.documentElement.requestFullscreen)
-      await document.documentElement.requestFullscreen({navigationUI:'hide'});
-  } catch(e) {}
-  // Plugins Capacitor
+  try { wakeLock=await navigator.wakeLock.request('screen') } catch(e) {}
+  try { if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'}); } catch(e) {}
   await capHideBars();
-  // Déclenche la MAJ de MainActivity
-  try {
-    window.Capacitor?.Plugins?.App?.exitApp; // juste un ping pour activer onWindowFocusChanged
-    // OU : appel explicite via plugin custom si tu l'as créé
-  } catch(e) {}
 }
-
 async function exitNightMode(){
   if(!nightActive) return;
-  nightActive = false;
-  window.__nightMode = false;
-  nightOverlay.classList.remove('on');
-  btnNight.classList.remove('night-on');
-  if(wakeLock){ try { await wakeLock.release() } catch(e){} wakeLock = null; }
-  try { if(document.exitFullscreen && document.fullscreenElement) await document.exitFullscreen() } catch(e) {}
+  nightActive=false; window.__nightMode=false;
+  nightOverlay.classList.remove('on'); btnNight.classList.remove('night-on');
+  if(wakeLock){ try { await wakeLock.release() } catch(e){} wakeLock=null; }
+  try { if(document.exitFullscreen&&document.fullscreenElement) await document.exitFullscreen() } catch(e) {}
   await capShowBars();
 }
-
 btnNight.addEventListener('click',()=>nightActive?exitNightMode():enterNightMode());
 nightOverlay.addEventListener('click',exitNightMode);
-
 document.addEventListener('visibilitychange',async()=>{
   if(wakeLock===null&&nightActive&&document.visibilityState==='visible'){
     try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}
   }
 });
 
+/* ═══ GARMIN CONNECT BRIDGE ══════════════════════════════════════════════════
+   Pont entre l'app Capacitor et le widget VoxiaWatch sur Quatix 7.
+   Dépend du plugin natif VoxiaGarminPlugin.java installé dans le projet Android.
+═══════════════════════════════════════════════════════════════════════════ */
+let garminConnected   = false;
+let garminSyncTimer   = null;
+
+function setGarminConnected(connected, deviceName) {
+  garminConnected = connected;
+  const name = deviceName || 'Quatix 7';
+  if (connected) {
+    garminBadge.classList.add('connected');
+    garminBadgeTxt.textContent = name.length > 12 ? name.substring(0,11)+'…' : name;
+    garminCfgDot.classList.add('on');
+    garminCfgTxt.textContent = 'Connecte : ' + name;
+  } else {
+    garminBadge.classList.remove('connected');
+    garminBadgeTxt.textContent = 'Garmin';
+    garminCfgDot.classList.remove('on');
+    garminCfgTxt.textContent = 'Non connecte';
+  }
+}
+
+// Envoie un statut à la montre
+async function sendGarminStatus(status, text) {
+  const cap = window.Capacitor?.Plugins?.VoxiaGarmin;
+  if (!cap || !garminConnected) return;
+  try {
+    const maxLen = inpGarminLen ? parseInt(inpGarminLen.value||'400') : 400;
+    await cap.sendTranscript({
+      status: status,
+      text: text ? text.substring(0, maxLen) : '',
+      elapsed: elapsed
+    });
+  } catch(e) { console.warn('[Garmin] sendTranscript:', e); }
+}
+
+// Sync chrono → montre toutes les 5s pendant l'enregistrement
+function startGarminSync() {
+  stopGarminSync();
+  if (!garminConnected) return;
+  garminSyncTimer = setInterval(() => {
+    if (isRec && garminConnected) sendGarminStatus('recording');
+  }, 5000);
+}
+function stopGarminSync() {
+  if (garminSyncTimer) { clearInterval(garminSyncTimer); garminSyncTimer = null; }
+}
+
+// Commande reçue de la montre : {"cmd":"start"} ou {"cmd":"stop"}
+async function handleGarminCommand(data) {
+  if (!inpGarminCtrl || !inpGarminCtrl.checked) return;
+  const cmd = (data && data.cmd) ? String(data.cmd) : '';
+  if (cmd === 'start' && !isRec) {
+    await start();
+  } else if (cmd === 'stop' && isRec) {
+    await stop();
+  }
+}
+
+// Initialisation du pont Garmin (via plugin Capacitor)
+async function initGarmin() {
+  const cap = window.Capacitor?.Plugins?.VoxiaGarmin;
+  if (!cap) {
+    // Mode web/dev : pas de plugin, on simule l'état déconnecté
+    console.log('[Garmin] Plugin non disponible (mode web)');
+    return;
+  }
+
+  // Écoute des changements de statut connexion
+  cap.addListener('garminStatus', (event) => {
+    setGarminConnected(event.connected === true, event.deviceName || '');
+    if (event.connected) { startGarminSync(); }
+    else { stopGarminSync(); }
+  });
+
+  // Écoute des messages envoyés par la montre
+  cap.addListener('garminMessage', (event) => {
+    try {
+      let data = event;
+      if (event.raw && typeof event.raw === 'string') {
+        try { data = JSON.parse(event.raw); } catch(e) {}
+      }
+      handleGarminCommand(data);
+    } catch(e) { console.warn('[Garmin] parse message:', e); }
+  });
+
+  // Statut initial
+  try {
+    const status = await cap.getStatus();
+    setGarminConnected(status.connected === true, status.deviceName || '');
+  } catch(e) { /* pas connecté, normal */ }
+}
+
 /* ═══ INIT ══════════════════════════════════════════════ */
-// En bas du script, remplace loadCfg() par :
 async function init() {
   loadCfg();
   if (cfg.apikey) loadModels(true);
-
-  // Cache le splash proprement une fois tout prêt
   try {
     const { SplashScreen } = window.Capacitor?.Plugins || {};
-    if (SplashScreen) {
-      await SplashScreen.hide({ fadeOutDuration: 500 });
-    }
+    if (SplashScreen) { await SplashScreen.hide({ fadeOutDuration: 500 }); }
   } catch(e) {}
 }
 
 init();
 if(cfg.apikey) loadModels(true);
-</script>
-<script>
-  window.addEventListener('load', async () => {
-    try {
-      const { StatusBar } = window.Capacitor?.Plugins || {};
-      const { NavigationBar } = window.Capacitor?.Plugins || {};
-      if (StatusBar) {
-        await StatusBar.setStyle({ style: 'DARK' });
-        await StatusBar.setBackgroundColor({ color: '#08080d' });
-        await StatusBar.setOverlaysWebView({ overlay: false });
-      }
-      if (NavigationBar) {
-        await NavigationBar.setColor({ color: '#08080d', darkButtons: false });
-      }
-    } catch(e) {}
-  });
+
+/* ═══ CAPACITOR READY ════════════════════════════════════ */
+window.addEventListener('load', async () => {
+  // StatusBar + NavigationBar
+  try {
+    const { StatusBar } = window.Capacitor?.Plugins || {};
+    const { NavigationBar } = window.Capacitor?.Plugins || {};
+    if (StatusBar) {
+      await StatusBar.setStyle({ style: 'DARK' });
+      await StatusBar.setBackgroundColor({ color: '#08080d' });
+      await StatusBar.setOverlaysWebView({ overlay: false });
+    }
+    if (NavigationBar) {
+      await NavigationBar.setColor({ color: '#08080d', darkButtons: false });
+    }
+  } catch(e) {}
+
+  // Garmin (léger délai pour laisser Capacitor s'initialiser)
+  setTimeout(initGarmin, 900);
+});
 </script>
 </body>
 </html>
-

@@ -10,9 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "@capacitor-community/speech-recognition": "^7.0.1",
-    "@capacitor/android": "^8.3.0",
-    "@capacitor/cli": "^7.6.1",
-    "@capacitor/core": "^8.3.0",
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^7.6.2",
+    "@capacitor/core": "^8.3.1",
     "@capacitor/ios": "^8.3.0",
     "@capacitor/splash-screen": "^8.0.1",
     "@capacitor/status-bar": "^8.0.2",

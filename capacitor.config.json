@@ -1,6 +1,6 @@
 {
-  "appId": "com.matteocean.voxia",
-  "appName": "Voxia",
+  "appId": "com.voxia.app",
+  "appName": "VoxiaApp",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0,
@@ -12,5 +12,9 @@
       "splashFullScreen": true,
       "splashImmersive": true
     }
+  },
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
   }
 }
