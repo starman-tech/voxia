@@ -259,12 +259,10 @@ public class VoxiaGarminPlugin extends Plugin implements ConnectIQListener {
         notifyListeners("garminStatus", event);
     }
 
-    @Override
     public void onDestroy() {
         if (connectIQ != null) {
             try { connectIQ.shutdown(getContext()); }
             catch (Exception e) { /* ignore */ }
         }
-        super.onDestroy();
     }
 }
