@@ -236,18 +236,20 @@ public class VoxiaGarminPlugin extends Plugin implements ConnectIQListener {
     private void handleWatchMessage(Object rawMsg) {
         try {
             JSObject event = new JSObject();
-            if (rawMsg instanceof JSONObject) {
-                JSONObject json = (JSONObject) rawMsg;
-                String cmd = json.optString("cmd", "");
-                event.put("cmd", cmd);
-                event.put("raw", json.toString());
-            } else {
-                event.put("raw", rawMsg.toString());
+            String cmd = "";
+            
+            if (rawMsg instanceof java.util.HashMap) {
+                java.util.HashMap map = (java.util.HashMap) rawMsg;
+                Object cmdObj = map.get("cmd");
+                if (cmdObj != null) { cmd = cmdObj.toString(); }
             }
-            // Notifie le JavaScript Voxia
+            
+            event.put("cmd", cmd);
+            Log.d(TAG, "Message recu de la montre: cmd=" + cmd);
             notifyListeners("garminMessage", event);
+            
         } catch (Exception e) {
-            Log.e(TAG, "handleWatchMessage: " + e.getMessage());
+            Log.e(TAG, "handleWatchMessage error: " + e.getMessage());
         }
     }
 

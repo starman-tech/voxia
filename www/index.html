@@ -1440,13 +1440,16 @@ function stopGarminSync() {
 
 // Commande reçue de la montre : {"cmd":"start"} ou {"cmd":"stop"}
 async function handleGarminCommand(data) {
-  if (!inpGarminCtrl || !inpGarminCtrl.checked) return;
-  const cmd = (data && data.cmd) ? String(data.cmd) : '';
-  if (cmd === 'start' && !isRec) {
-    await start();
-  } else if (cmd === 'stop' && isRec) {
-    await stop();
-  }
+    if (!inpGarminCtrl || !inpGarminCtrl.checked) return;
+    const cmd = (data && data.cmd) ? String(data.cmd) : '';
+    
+    if (cmd === 'start' && !isRec) {
+        await start();
+        // ← répondre immédiatement à la montre
+        await sendGarminStatus('recording');
+    } else if (cmd === 'stop' && isRec) {
+        await stop();
+    }
 }
 
 // Initialisation du pont Garmin (via plugin Capacitor)
