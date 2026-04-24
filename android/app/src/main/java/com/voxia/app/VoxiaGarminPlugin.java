@@ -54,11 +54,21 @@ public class VoxiaGarminPlugin extends Plugin implements ConnectIQListener {
 
     // ── Initialisation ────────────────────────────────────────────────────────
     @Override
-    public void load() {
+    protected void handleOnStart() {
+        super.handleOnStart();
         Context ctx = getContext();
+        Log.d(TAG, "=== INIT SDK GARMIN ===");
         connectIQ = ConnectIQ.getInstance(ctx, IQConnectType.WIRELESS);
         connectIQ.initialize(ctx, true, this);
-        Log.d(TAG, "ConnectIQ SDK initializing...");
+    }
+
+    @Override
+    protected void handleOnStop() {
+        super.handleOnStop();
+        if (connectIQ != null) {
+            try { connectIQ.shutdown(getContext()); }
+            catch (Exception e) { Log.e(TAG, "shutdown: " + e.getMessage()); }
+        }
     }
 
     // ── Méthodes exposées au JavaScript ──────────────────────────────────────

@@ -21,6 +21,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://dl.bintray.com/garmin/com.garmin.android' }
     }
     configurations.all {
         resolutionStrategy {
